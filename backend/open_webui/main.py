@@ -1824,18 +1824,24 @@ async def add_pipeline(form_data: AddPipelineForm, user=Depends(get_admin_user))
     r = None
     try:
         urlIdx = form_data.urlIdx
+        print(f"/api/pipelines/add: index {urlIdx}")
 
         url = openai_app.state.config.OPENAI_API_BASE_URLS[urlIdx]
         key = openai_app.state.config.OPENAI_API_KEYS[urlIdx]
+        print(f"/api/pipelines/add: url {url}")
+        print(f"/api/pipelines/add: key {key}")
 
         headers = {"Authorization": f"Bearer {key}"}
+        print(f"/api/pipelines/add:headers {headers}")
         r = requests.post(
             f"{url}/pipelines/add", headers=headers, json={"url": form_data.url}
         )
+        print(f"/api/pipelines/add: res {r}")
 
         r.raise_for_status()
+        print(f"/api/pipelines/add: res status {r}")
         data = r.json()
-
+        print(f"/api/pipelines/add: res json {data}")
         return {**data}
     except Exception as e:
         # Handle connection error here
